@@ -1,27 +1,28 @@
-const FRAME_RATE = 60;
+import { EventEmitter } from "events";
 
-export default class VideoController {
+export default class VideoController extends EventEmitter {
   constructor({ videoId }) {
+    super();
+
     this.video = document.getElementById(videoId);
     this.interval = null;
   }
 
-  displayVideoOnElement(stream) {
+  addStream(stream) {
+    this.addStreamToVideoElement(stream);
+    this.addEventForLoadedVideo();
+  }
+
+  addStreamToVideoElement(stream) {
     if ("srcObject" in this.video) {
       this.video.srcObject = stream;
     }
   }
 
-  displayVideoOnCanvas(canvasController) {
-    this.video.addEventListener("loadedmetadata", () => {
-      this.interval = setInterval(
-        () => canvasController.drawImage(this.video),
-        FRAME_RATE
-      );
+  addEventForLoadedVideo() {
+    //developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/loadedmetadata_event
+    https: this.video.addEventListener("loadedmetadata", () => {
+      this.emit("loaded-video", this.video);
     });
-  }
-
-  pauseVideoOnCanvas() {
-    clearInterval(this.interval);
   }
 }

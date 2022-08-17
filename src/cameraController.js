@@ -5,7 +5,7 @@ export default class CameraController {
     this.navigator = navigator;
   }
 
-  async getStream() {
+  async getCameraStream() {
     try {
       const stream = await this.navigator.mediaDevices.getUserMedia(
         CONSTRAINTS
