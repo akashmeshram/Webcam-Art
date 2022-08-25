@@ -8,6 +8,11 @@ export default class VideoController extends EventEmitter {
     this.interval = null;
   }
 
+  setupVideoElement({ width, height }) {
+    this.video.width = width;
+    this.video.height = height;
+  }
+
   addStream(stream) {
     this.addStreamToVideoElement(stream);
     this.addEventForLoadedVideo();
