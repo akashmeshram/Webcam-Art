@@ -4,8 +4,16 @@ import CameraController from "./src/cameraController";
 import VideoController from "./src/videoController";
 import CanvasController from "./src/canvasController";
 import { getScreenDimensions } from "./src/util";
+import BoardController from "./src/boardController";
 
 const FRAME_RATE = 60;
+const VIDEO_ID = "video";
+const CANVAS_ID = "canvas";
+const LAYER_IDS = {
+  redLayerId: "red-layer",
+  greenLayerId: "green-layer",
+  blueLayerId: "blue-layer",
+};
 
 window.addEventListener("load", async () => {
   if (navigator && navigator.mediaDevices) app();
@@ -16,8 +24,9 @@ const app = async () => {
   let interval = null;
   try {
     const cameraController = new CameraController(navigator);
-    const videoController = new VideoController({ videoId: "video" });
-    const canvasController = new CanvasController({ canvasId: "canvas" });
+    const videoController = new VideoController({ videoId: VIDEO_ID });
+    const canvasController = new CanvasController({ canvasId: CANVAS_ID });
+    const boardController = new BoardController(LAYER_IDS);
 
     const { width, height } = getSetUpDimentions();
     canvasController.setupCanvas({ width, height });
@@ -27,7 +36,7 @@ const app = async () => {
     videoController.addStream(webCamStream);
     videoController.on("loaded-video", (video) => {
       interval = setInterval(
-        () => canvasController.drawImage(video),
+        () => processVideoFrame(video, canvasController, boardController),
         FRAME_RATE
       );
     });
@@ -45,4 +54,10 @@ const getSetUpDimentions = () => {
   const width = (screenDimentions.gridHeight / 3) * 4;
 
   return { width, height };
+};
+
+const processVideoFrame = (videoElement, canvasController, boardController) => {
+  canvasController.drawImage(videoElement);
+  const pixelsGrid = canvasController.getPixelsMatrix();
+  boardController.displayPixelsOnLayers(pixelsGrid);
 };
