@@ -9,6 +9,7 @@ import BoardController from "./src/boardController";
 const FRAME_RATE = 60;
 const VIDEO_ID = "video";
 const CANVAS_ID = "canvas";
+const BOARD_ID = "board";
 const LAYER_IDS = {
   redLayerId: "red-layer",
   greenLayerId: "green-layer",
@@ -26,7 +27,7 @@ const app = async () => {
     const cameraController = new CameraController(navigator);
     const videoController = new VideoController({ videoId: VIDEO_ID });
     const canvasController = new CanvasController({ canvasId: CANVAS_ID });
-    const boardController = new BoardController(LAYER_IDS);
+    const boardController = new BoardController(BOARD_ID, LAYER_IDS);
 
     const { width, height } = getSetUpDimentions();
     canvasController.setupCanvas({ width, height });

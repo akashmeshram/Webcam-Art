@@ -1,7 +1,8 @@
 const PALETTE = ["░", "▄", "▀", "█"];
 
 export default class BoardController {
-  constructor({ redLayerId, greenLayerId, blueLayerId }) {
+  constructor(boardId, { redLayerId, greenLayerId, blueLayerId }) {
+    this.board = document.getElementById(boardId);
     this.red = document.getElementById(redLayerId);
     this.green = document.getElementById(greenLayerId);
     this.blue = document.getElementById(blueLayerId);
